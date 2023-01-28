@@ -70,20 +70,33 @@ const adduser=async (first_name,last_name,email,password)=>{
 
 module.exports.signup = async (req,res) => {
     // console.log(req.body)
-    const {email,password}=req.body
-
-   let result= await searching(email,password)
-    console.log(result)
-  
     
-    res.render('chatpage',{name:result.first_name})
+    //    let result= await searching(email,password)
+    
+    const {email,password}=req.body
+    // console.log(result)
+    try{
+
+        var result=await Student.findOne({email:email,password:password}).clone()
+        res.render('chatpage',{name:result.first_name})
+    }catch(err){
+        res.render('error')
+        
+    }       
+    
+        
+
+
+    
+    
+    
 }
 
-const searching=async (email,password) => {
-    let result=await Student.findOne({email:email,password:password},function(err,result){
-        if(err) {
-            res.render('')
-        }
-    })
-    return result
-}
+// const searching=async (email,password) => {
+//     let result=await Student.findOne({email:email,password:password},function(err,result){
+//         if(err) {
+//             res.render('')
+//         }
+//     }).clone()
+//     return result
+// }
