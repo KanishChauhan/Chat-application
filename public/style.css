@@ -9,8 +9,7 @@
 }
 
     body {
-        display: flex;
-        align-items: center;
+       
         justify-content: center;
         min-height: 100vh;
         background: #F8F8F8;
@@ -47,13 +46,20 @@
     .message_area{
         /* overflow:hidden; */
         /* position: relative; */
-        height: 400px;
+       
+        height: 450px;
         padding: 16px;
+        
+        overflow-y: auto;
+        padding-top: 20px;
+        
+       
+    }
+
+    #outg{
         display: flex;
         flex-direction: column;
         align-items: flex-end;
-        overflow-y: auto;
-        padding-top: 20px;
     }
     textarea {
 
@@ -89,6 +95,7 @@
         background: #f7f5f5;
         border: 1px solid rgb(153, 151, 151);
         border-radius: 0px 0px 20px 20px;
+        
     }
     
     .message {
@@ -98,12 +105,17 @@
         max-width: 300px;
         position: relative;
     }
+    .servermsg{
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+    }
     .incomingmsg {
         /* justify-content: center; */
        /* width: 50%; */
        /* text-align: justify; */
        /* text-align:end; */
-       
+      
         text-align: justify;
         background: #8F8BE8;
         color: #fff;  
