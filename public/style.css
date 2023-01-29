@@ -1,16 +1,155 @@
-.gradient-custom {
-    /* fallback for old browsers */
-    /* background: #6a11cb; */
+
+
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+* {
+    padding: 0;
+    margin: 0;
+    box-sizing: border-box;
+}
+
+    body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        min-height: 100vh;
+        background: #F8F8F8;
+        font-family: 'Roboto', sans-serif;
+    }
+    section.chat_section {
+        /* position: relative; */
+        width: 800px;
+        overflow: hidden;
+        /* height:400px; */
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        /* border:1px solid black; */
+        /* box-shadow: #333; */
+        border: 1px solid rgb(153, 151, 151);
+        border-radius: 20px;
+        max-width: 90%;
+        background: #fff;
+    }
+    .brand {
+        border-bottom: 1px solid rgb(180, 176, 176);
+        border-radius: 20px 20px 0px 0px;
+        padding: 20px;
+        background: #f1f1f1;
+        display: flex;
+        align-items: center;
+    }
+    .brand h1 {
+        text-transform: uppercase;
+        font-size: 20px;
+        color: #444;
+        margin-left: 10px;
+        margin-bottom: 0px;
+    }
+    .message_area{
+        /* overflow:hidden; */
+        /* position: relative; */
+        height: 400px;
+        padding: 16px;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+        overflow-y: auto;
+        padding-top: 20px;
+    }
+    textarea {
+
+        width: 100%;
+        /* border: none; */
+       
+        padding: 20px;
+        font-size: 16px;
+        outline: none;
+        /* border-radius: ; */
+        height: 100%;
+        border-radius: 0px 0px 0px 20px;
+        background: #f7f5f5;
+        padding-left: ;
+
+        /* background: #d8d6d6; */
+    }
+    #bt{
+        border-radius: 0px 0px 20px 0px;
+        margin-bottom: 0px;
+        /* justify-content: center; */
+        /* height:60px; */
+    }
+    #textarea{
+        display: flex;
+        flex-direction: row;
+        /* position: absolute; */
+        /* background: #d8d6d6; */
+        background: #f7f5f5;
+        border: 1px solid rgb(153, 151, 151);
+        border-radius: 0px 0px 20px 20px;
+    }
     
-    /* Chrome 10-25, Safari 5.1-6 */
-    /* background: -webkit-linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1)); */
-    
-    /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
-    /* background-image: url('https://wallpaperaccess.com/full/327135.jpg'); */
-    /* background: linear-gradient(to right, rgba(106, 17, 203, 1), rgba(37, 117, 252, 1)) */
+    .message {
+        padding: 20px; 
+        border-radius: 4px; 
+        margin-bottom: 40px;
+        max-width: 300px;
+        position: relative;
+    }
+    .incomingmsg {
+        /* justify-content: center; */
+       /* width: 50%; */
+       /* text-align: justify; */
+       /* text-align:end; */
+       
+        text-align: justify;
+        background: #8F8BE8;
+        color: #fff;  
+        margin: 10px 20px 10px 20px;
+        
+        border:1px solid #dbd8d8;
+        border-radius: 10px;
+        width: fit-content;
+        max-width: 50%;
+        /* display: inline-block; */
+        /* width:200px ; */
+    }
+    .outgoingmsg {
+       
+        width: fit-content;
+        max-width: 50%;
+        
+        
+        /* width: 50%; */
+        text-align: justify;
+        /* text-align:stasrt; */
+        
+        /* text-align: end; */
+        /* width:200px ; */
+        background: #e9eafd;
+        color: #787986;
+        margin: 10px 20px 10px 20px;
+        border:1px solid #dbd8d8;
+        border-radius: 10px;
+        /* position: absolute; */
+        /* right: 0; */
+        /* margin-left: auto; */
+        
     }
 
-    body{
-        background-image: url('https://wallpaperaccess.com/full/327135.jpg');
-    
+    .incomingmsg p {
+        padding:8px;
+        margin-bottom: 0px;
+        
+    }
+
+    .outgoingmsg p {
+        padding:8px;
+        margin-bottom: 0px;
+
+    }
+    .message h4 {
+        position: absolute;
+        /* top: -20px; */
+        left: 0;
+        color: #333;
+        font-size: 14px;
     }

@@ -10,6 +10,9 @@ router.get('/',(req,res)=>{
 router.get('/signup',user.signpage)
 router.post('/signup',user.sign)
 router.post('/index',user.signup)
+router.get('/chat',(req,res) => {
+res.render('chatpage')
+})
 
 
 module.exports=router

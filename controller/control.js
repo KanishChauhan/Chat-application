@@ -13,6 +13,7 @@ const student=new mongoose.Schema({
         type:String,
         minLength:11
     },
+    
     password:String
 
  },{versionKey: false})
