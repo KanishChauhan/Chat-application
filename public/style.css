@@ -67,9 +67,13 @@
         height: 100%;
         border-radius: 0px 0px 0px 20px;
         background: #f7f5f5;
-        padding-left: ;
+        /* padding-left: ; */
 
         /* background: #d8d6d6; */
+    }
+
+    svg{
+        margin-top:12px;
     }
     #bt{
         border-radius: 0px 0px 20px 0px;
