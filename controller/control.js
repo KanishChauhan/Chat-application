@@ -69,7 +69,7 @@ const adduser=async (first_name,last_name,email,password)=>{
 }
 
 
-module.exports.signup = async (req,res) => {
+module.exports.login = async (req,res) => {
     // console.log(req.body)
     
     //    let result= await searching(email,password)

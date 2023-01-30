@@ -9,7 +9,7 @@ router.get('/',(req,res)=>{
 // router.get('/hello',user.findQ)
 router.get('/signup',user.signpage)
 router.post('/signup',user.sign)
-router.post('/index',user.signup)
+router.post('/index',user.login)
 router.get('/chat',(req,res) => {
 res.render('chatpage')
 })
