@@ -6,9 +6,11 @@ let bt=document.getElementById('bt')
 bt.addEventListener('click',fun)
 document.getElementById('textarea').addEventListener('keyup',(event)=>{
     
-        if (event.key === "Enter") {
+        if (event.key == "Enter") {
             // event.preventDefault();
-            // console.log(event.target.value)
+            // let a=''
+            // console.log(event.target.value.trim()=='');
+            // console.log()
             fun()
         }
          
@@ -20,7 +22,7 @@ function fun(){
 // let serverM={
 //     message:msg
 // }
-    if(msg!=''){
+    if(msg.trim()!=''){
 
         let div=document.createElement('div')
         let div2=document.createElement('div')
@@ -31,6 +33,9 @@ function fun(){
         let msgarea=document.getElementById('msgarea')
         msgarea.appendChild(div2)
         document.getElementById('msg').value=''
+        div2.scrollIntoView();
+
+        div2.scrollIntoView({behavior: "smooth"});
     }
     // console.log(msg)
 socket.emit('message', msg)
