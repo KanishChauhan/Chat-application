@@ -1,6 +1,7 @@
 const express=require('express')
 const router=express.Router()
 const user=require('../controller/control');
+const { reqAuthentication, reqNotAuthentication } = require('../token/token.js')
 
 router.get('/',(req,res)=>{
    
@@ -8,8 +9,8 @@ router.get('/',(req,res)=>{
 })
 // router.get('/hello',user.findQ)
 router.get('/signup',user.signpage)
-router.post('/signup',user.sign)
-router.post('/index',user.login)
+router.post('/signup',user.register)
+router.post('/',reqAuthentication,user.login)
 router.get('/chat',(req,res) => {
 res.render('chatpage')
 })

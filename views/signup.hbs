@@ -15,6 +15,13 @@
               <p class="text-white-50 mb-5">Please enter your details</p>
              <!-- 2 column grid layout with text inputs for the first and last names -->
 <form class="needs-validation" method="POST" action="/signup" >
+{{#if error}}
+<div class="alert alert-danger alert-dismissible fade show" role="alert">
+  {{error}}
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+  </button>
+</div>
+   {{/if}}
               <div class="row">
                 <div class="col-md-6 mb-4">
                   <div class="form-floating">

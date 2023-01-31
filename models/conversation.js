@@ -6,4 +6,5 @@
         sender:{type:String}
     },{timestamps:true})
 
-    module.exports=mongoose.model('Message',messageSchema)
+    module.exports.user=mongoose.model('Message',messageSchema)
+    

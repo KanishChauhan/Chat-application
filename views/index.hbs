@@ -12,8 +12,21 @@
 
               <h2 class=" text-white fw-bold mb-2 text-uppercase">Login</h2>
               <p class="text-white-50 mb-5">Please enter your login and password!</p>
-<form method="POST" action="/index">
-
+<form method="POST" action="/">
+{{#if error}}
+<div class="alert alert-danger alert-dismissible fade show" role="alert">
+  {{error}}
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+  </button>
+</div>
+   {{/if}}
+   {{#if msg}}
+<div class="alert alert-success alert-dismissible fade show" role="alert">
+  {{msg}}
+  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
+  </button>
+</div>
+   {{/if}}
              <div class="form-floating mb-4">
   <input type="email" class="form-control" id="floatingInput"  placeholder="email@gmail.com" name="email">
   <label for="floatingInput">email</label>

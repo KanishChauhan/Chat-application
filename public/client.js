@@ -22,6 +22,10 @@ function fun(){
 // let serverM={
 //     message:msg
 // }
+
+
+
+
     if(msg.trim()!=''){
 
         let div=document.createElement('div')
