@@ -60,10 +60,24 @@
        
     }
 
+    .color{
+        color:blue;
+    }
+
+
+    .color p{
+        margin-bottom:0;
+    }
+    .sbd{
+        display: flex;
+        flex-direction: column;
+    }
+
     .outg{
         display: flex;
         flex-direction: column;
         align-items: flex-end;
+        overflow: hidden;
     }
     textarea {
 
@@ -81,7 +95,7 @@
 
         /* background: #d8d6d6; */
     }
-
+    
     svg{
         margin-top:12px;
     }
@@ -136,6 +150,7 @@
        
         width: fit-content;
         max-width: 50%;
+        overflow: hidden;
         
         
         /* width: 50%; */

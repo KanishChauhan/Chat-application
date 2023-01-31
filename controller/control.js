@@ -1,5 +1,6 @@
 // app.use(mongo)
 const mongoose=require('mongoose')
+const Joi=require('joi')
 const url='mongodb://127.0.0.1:27017/ChattingApp'
 mongoose.set('strictQuery',true)
 let db=mongoose.connect(url,{useNewUrlParser: true}).then(()=>{console.log('connection established')
@@ -71,9 +72,19 @@ const adduser=async (first_name,last_name,email,password)=>{
 
 module.exports.login = async (req,res) => {
     // console.log(req.body)
-    
-    //    let result= await searching(email,password)
-    
+
+    //LOGIN INPUT VALIDATION USING JOI 
+    const schema=Joi.object({
+        email:Joi.string().required(),
+        password:Joi.string().required().min(4)
+    }).options({abortEarly:false})
+
+    const { error } =schema.validate(req.body)
+	if (error) {
+		res.status(406);
+		res.json(error)
+	} 
+    console.log(req.body)
     const {email,password}=req.body
     // console.log(result)
     try{
