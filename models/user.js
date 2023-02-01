@@ -1,7 +1,8 @@
 
 const { required } = require('joi');
 const mongoose = require('mongoose');
-const student=new mongoose.Schema({
+const bcrypt = require("bcrypt")
+const user=new mongoose.Schema({
     first_name:{type:String},
     last_name:{type:String},
     email:{
@@ -12,6 +13,7 @@ const student=new mongoose.Schema({
     },
     
     password:{type:String,required:true},
+    cpassword:{type:String,required:true},
     token: {
         type: String,
         default: null,
@@ -20,5 +22,13 @@ const student=new mongoose.Schema({
 
  },{versionKey: false})
 
- const Student=new mongoose.model('ExistingUsers',student)
+
+//pre middlweware is used for hashing function call
+user.pre('save',async function(next ){
+    this.password=await bcrypt.hash(this.password,10)
+    next()
+    // console.log(this.password)
+})
+
+ const Student=new mongoose.model('ExistingUsers',user)
 module.exports=Student

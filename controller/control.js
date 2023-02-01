@@ -1,16 +1,19 @@
-// app.use(mongo)
+
 require('dotenv').config()
 const Joi=require('joi')
 const mongoose=require('mongoose')
 const router = require('express').Router();
 const user = require("../models/user");
 const msg = require("../models/conversation");
+
+const bcrypt = require("bcrypt")
 const { reqAuthentication, reqNotAuthentication } = require('../token/token.js')
 const jwt = require('jsonwebtoken');
-const cookieParser = require('cookie-parser');
-// console.log(msg,user)
 
+//COOKIE PARSER
+const cookieParser = require('cookie-parser');
 router.use(cookieParser());
+//
 module.exports.findQ=async (req,res)=>{
     // console.log('first')
     let result=await Student.find({},(err,doc)=>{
@@ -37,72 +40,70 @@ const schema=Joi.object({
     first_name:Joi.string().required(),
     last_name:Joi.string().required(),
     email:Joi.string().required(),
-    password:Joi.string().required().min(4)
+    password:Joi.string().required().min(4),
+    cpassword:Joi.string().required().min(4)
 }).options({abortEarly:false})
 
 
-
+//REGISTER ROUTE CONTROLLER
 module.exports.register=async (req,res)=>{
    
 //applying register validation
 const { error } = schema.validate(req.body);
 if (error)
-{
+{     return res.render('signup', {error: error.details[0].message});} 
 
-    return res.render('signup', {error: error.details[0].message});
-} 
     
+    const {first_name,last_name,email,password,cpassword}=req.body
 
-
-    const {first_name,last_name,email,password}=req.body
-    // console.log(req.body)
-
-
+// searching whether user already exists in database 
     const usernameExist = await user.findOne({ first_name: req.body.first_name,last_name:req.body.last_name});
     if (usernameExist){
-
         return res.render('signup', {error: 'This username already exists. Please try another.'});
     } 
 
 
+    if(password==cpassword){
 
-
-    try{
-
-        const add1=new user({
-            first_name:first_name,
-            last_name:last_name,
-            email:email,
-            password:password,
-            token:jwt.sign({ id: req.body._id }, process.env.TOKEN_SECRET)
+        //adding user in database
+        try{
             
-        })
-        
-        // console.log(token)
-        const registered = await add1.save((err, user) => {
-    // console.log(user)
-    if (err) throw err;
-    
-    jwt.sign({ id: req.body._id  }, process.env.TOKEN_SECRET, (err, token) => {
-        console.log(token)
-        
-                let oneDay = 86400000;
+            const add1=new user({
+                first_name:first_name,
+                last_name:last_name,
+                email:email,
+                password:password,
+                cpassword:cpassword,
+                token:jwt.sign({ id: req.body._id }, process.env.TOKEN_SECRET)
+                
+            })
 
-                //setting token to browser cookies to save in local storage
-                res.cookie('jwt', token, { maxAge: oneDay, httpOnly: true })
-
-                console.log('JWT is in browser cookie');
-
-                //redirecting
-                res.render('index',{msg:"User added Successfully, Now Login"})
-            });
-
-        })
+            //hashing a password
+            
 
 
 
 
-    //     let result=await add1.save()
+            const registered = await add1.save((err, user) => {
+                
+                if (err) throw err;
+                
+                jwt.sign({ id: req.body._id  }, process.env.TOKEN_SECRET, (err, token) => {
+                    console.log(token)
+                    
+                    // let oneDay = 86400000;
+                    console.log('JWT is in browser cookie');
+                    
+                    //redirecting
+                    res.render('index',{msg:"User added Successfully, Now Login"})
+                });
+                
+            })
+            
+            
+            
+            
+            //     let result=await add1.save()
         
     //     var obj=await user.findOne({email:email,password:password}).clone()
     //     // console.log(id)
@@ -113,15 +114,16 @@ if (error)
     //  console.log(token)
     //         //setting token to browser cookies to save in local storage
     //         res.cookie('jwt', token, { maxAge: 86400000, httpOnly: true });
-
+    
     //         console.log('JWT is in browser cookie');
     //         res.redirect('index')
         
 
                 
-    }catch(err){
-        console.log('error occured'+err)
-    }
+}catch(err){
+    console.log('error occured'+err)
+}
+}
     
     // console.log(result)
     
