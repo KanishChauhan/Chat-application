@@ -1,6 +1,6 @@
 const socket=io()
 
-
+var audio=new Audio('note.mp3')
 let bt=document.getElementById('bt')
 bt.addEventListener('click',fun)
 document.getElementById('textarea').addEventListener('keyup',(event)=>{
@@ -20,6 +20,7 @@ document.getElementById('textarea').addEventListener('keyup',(event)=>{
 // document.getElementById('name').innerHTML=''
 
 function fun(){
+    audio.play()
     var msg=document.getElementById('msg').value
     let nam=document.getElementById('username').lastElementChild.innerHTML    // let serverM={
         //     message:msg

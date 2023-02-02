@@ -69,82 +69,36 @@ const {first_name,last_name,email,password,cpassword}=req.body
 
 
     if(password==cpassword){
-        
-        try{
-            
-            //adding user in database
-            const add1=new user({
-                first_name:first_name,
-                last_name:last_name,
-                email:email,
-                password:password,
-                // token:jwt.sign({ id: req.body._id }, process.env.TOKEN_SECRET)
-                
-            })
+        //hashing password
+        const hashedPassword = await bcrypt.hash(req.body.password, 12);
 
-            //hashing a password before save using pre method
+        const add1=new user({
+                            first_name:first_name,
+                            last_name:last_name,
+                            email:email,
+                            password:hashedPassword,
+                            token:jwt.sign({ id: req.body._id }, process.env.TOKEN_SECRET)
+                            
+                        })
 
-            const registered = await add1.save()
-            if(registered){
-                res.render('index',{error:'useradded'})
-            }
+        const registered = await add1.save((err, user) => {
+            if (err) throw err;
+// console.log(user)
+            jwt.sign({ id:user._id,first_name:first_name }, process.env.TOKEN_SECRET, (err, token) => {
 
+                let oneDay = 86400000;
 
-                        // const registered = await add1.save((err, user) => {
-                
-            //     if (err) throw err;
-                
-            //     jwt.sign({ email:email,id: req.body._id  }, process.env.TOKEN_SECRET, (err, token) => {
-                   
-            //         //redirecting
-            //         res.redirect('/chat',{name:first_name})
-            //     });
-                
-            // })
-            
-            
-            
-            
-            //     let result=await add1.save()
-        
-    //     var obj=await user.findOne({email:email,password:password}).clone()
-    //     // console.log(id)
-        
-    //     //generate a new token
-    //  let token= jwt.sign({ id: obj._id }, process.env.token_secret)
+                //setting token to browser cookies to save in local storage
+                res.cookie('jwt', token, { maxAge: oneDay, httpOnly: true })
 
-    //  console.log(token)
-    //         //setting token to browser cookies to save in local storage
-    //         res.cookie('jwt', token, { maxAge: 86400000, httpOnly: true });
-    
-    //         console.log('JWT is in browser cookie');
-    //         res.redirect('index')
-        
+                console.log('JWT is in browser cookie');
 
-                
-}catch(err){
-    console.log('error occured'+err)
-}
-}
-else{
-    res.render('signup',{error:"Password does not match"})
-}
-    
-    // console.log(result)
-    
-    
-
-
-   
-}
-
-  
-// adduser
-const adduser=async (first_name,last_name,email,password)=>{
-    // Student.create(
-       
-}
-
+                //redirecting
+                res.redirect('/chat?valid=' +user.email)
+            });
+        });
+    }
+}        
 
 
 
@@ -158,39 +112,64 @@ const schemaLogin=Joi.object({
 
 
 //login get request
-module.exports.loginG = async (req,res) => {
+module.exports.loginG = (req,res) => {
+    // res.cookie('jwt','k')
     res.render('index')
+    // console.log('hi')
 }
 
 
 
 
 //login post request
-module.exports.login = async (req,res) => {
-    
-    console.log(req.body)
-    
+module.exports.login = async (req,res) => { 
+       
+    try {
+        const {email,password}=req.body;
+        
 
+        //validating
+        const { error } = schemaLogin.validate(req.body);
+        if (error) return res.render('index', {error: error.details[0].message});
 
-    
-    const {email,password}=req.body;
-    console.log(email,password)
-   
-    try{
+        //finding user
+        const result = await user.findOne({ email:email });
+        if (!user) return res.render('index', {error: 'Credentials entered are incorrect.'});
 
-        var result=await user.findOne({email:email})
-        const matchpassword=await bcrypt.compare(password,result.password)
-        if(!matchpassword){
+        //user correct or not (hasing) 
+        const validPassword = await bcrypt.compare(password, result.password);
+        if (!validPassword) return res.render('index', {error: 'Credentials entered are incorrect.'});
 
-           return res.render('index',{error:"Wrong Credentials"}) 
+        // if validPassword return true then send 
+        if (validPassword) {
+
+            // create and assign json web token
+            result.token;
+            await user.save((err, user) => {
+                if (err) throw err;
+
+                jwt.sign({ id: result._id,email:email }, process.env.TOKEN_SECRET, (err, token) => {
+
+                    let oneDay = 86400000;
+
+                    //setting token to browser cookies to save in local storage
+                    res.cookie('jwt', token, { maxAge: oneDay, httpOnly: true }) //1s = 1000
+
+                    console.log('JWT is in browser cookie');
+
+                    //redirecting
+                    res.redirect('/chat?valid=' + result.first_name)
+                });
+
+            });
+            // res.send({token: token});   
         }
-        res.redirect('/chat?valid=' + result.first_name)
 
-    }catch(err){
+    } catch (error) {
 
-        res.status(500).json({message:"Something went wrong"})
-    }       
-    
+        res.status(400).send("Invalid" + error);
+
+    }
 
     
     mongoose.disconnect()

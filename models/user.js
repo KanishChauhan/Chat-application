@@ -23,11 +23,11 @@ const user=new mongoose.Schema({
 
 
 //pre middlweware is used for hashing function call
-user.pre('save',async function(next ){
-    this.password=await bcrypt.hash(this.password,10)
-    next()
-    // console.log(this.password)
-})
+// user.pre('save',async function(next ){
+//     this.password=await bcrypt.hash(this.password,10)
+//     next()
+//     // console.log(this.password)
+// })
 
  const User=new mongoose.model('ExistingUsers',user)
 module.exports=User
