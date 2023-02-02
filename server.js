@@ -25,6 +25,7 @@ require('./database/mongo.js')
 const io= require('socket.io')(http)
 io.on('connection',(socket)=>{
     console.log('SOCKET CONNECTED')
+    
     socket.on('message',(msg)=>{
         // console.log(msg)
         socket.broadcast.emit('message',msg)

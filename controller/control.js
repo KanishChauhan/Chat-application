@@ -54,51 +54,53 @@ if (error)
 {     return res.render('signup', {error: error.details[0].message});} 
 
     
-    const {first_name,last_name,email,password,cpassword}=req.body
-
 // searching whether user already exists in database 
+const {first_name,last_name,email,password,cpassword}=req.body
     const usernameExist = await user.findOne({ first_name: req.body.first_name,last_name:req.body.last_name});
     if (usernameExist){
         return res.render('signup', {error: 'This username already exists. Please try another.'});
-    } 
+    }
+    
+    const emailExist = await user.findOne({email:email});
+    if(emailExist){
+        return res.render('signup', {error: 'This email already exists. Please try another.'});
+
+    }
 
 
     if(password==cpassword){
-
-        //adding user in database
+        
         try{
             
+            //adding user in database
             const add1=new user({
                 first_name:first_name,
                 last_name:last_name,
                 email:email,
                 password:password,
-                cpassword:cpassword,
-                token:jwt.sign({ id: req.body._id }, process.env.TOKEN_SECRET)
+                // token:jwt.sign({ id: req.body._id }, process.env.TOKEN_SECRET)
                 
             })
 
-            //hashing a password
-            
+            //hashing a password before save using pre method
+
+            const registered = await add1.save()
+            if(registered){
+                res.render('index',{error:'useradded'})
+            }
 
 
-
-
-            const registered = await add1.save((err, user) => {
+                        // const registered = await add1.save((err, user) => {
                 
-                if (err) throw err;
+            //     if (err) throw err;
                 
-                jwt.sign({ id: req.body._id  }, process.env.TOKEN_SECRET, (err, token) => {
-                    console.log(token)
-                    
-                    // let oneDay = 86400000;
-                    console.log('JWT is in browser cookie');
-                    
-                    //redirecting
-                    res.render('index',{msg:"User added Successfully, Now Login"})
-                });
+            //     jwt.sign({ email:email,id: req.body._id  }, process.env.TOKEN_SECRET, (err, token) => {
+                   
+            //         //redirecting
+            //         res.redirect('/chat',{name:first_name})
+            //     });
                 
-            })
+            // })
             
             
             
@@ -123,6 +125,9 @@ if (error)
 }catch(err){
     console.log('error occured'+err)
 }
+}
+else{
+    res.render('signup',{error:"Password does not match"})
 }
     
     // console.log(result)
@@ -152,40 +157,54 @@ const schemaLogin=Joi.object({
 
 
 
-module.exports.login = async (req,res) => {
-    // console.log(req.body)
+//login get request
+module.exports.loginG = async (req,res) => {
+    res.render('index')
+}
 
-    //LOGIN INPUT VALIDATION USING JOI 
-    const {error} = schemaLogin.validate(req.body);
-if (error){
- res.render('index', {error: error.details[0].message});
- console.log(error)
-}    
+
+
+
+//login post request
+module.exports.login = async (req,res) => {
+    
+    console.log(req.body)
     
 
-	
-    console.log(req.body)
-    const {email,password}=req.body
-    // console.log(result)
+
+    
+    const {email,password}=req.body;
+    console.log(email,password)
+   
     try{
 
-        var result=await user.findOne({email:email,password:password}).clone()
-        res.render('chatpage',{name:result.first_name})
+        var result=await user.findOne({email:email})
+        const matchpassword=await bcrypt.compare(password,result.password)
+        if(!matchpassword){
+
+           return res.render('index',{error:"Wrong Credentials"}) 
+        }
+        res.redirect('/chat?valid=' + result.first_name)
+
     }catch(err){
-        res.render('error')
-        
+
+        res.status(500).json({message:"Something went wrong"})
     }       
-       
+    
 
     
     mongoose.disconnect()
 }
 
-// const searching=async (email,password) => {
-//     let result=await Student.findOne({email:email,password:password},function(err,result){
-//         if(err) {
-//             res.render('')
-//         }
-//     }).clone()
-//     return result
-// }
+
+
+//chat get request
+module.exports.chat = async (req,res) => {
+
+
+    res.render('chatpage',{name:req.query.valid})
+}
+
+
+
+

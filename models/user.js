@@ -3,8 +3,8 @@ const { required } = require('joi');
 const mongoose = require('mongoose');
 const bcrypt = require("bcrypt")
 const user=new mongoose.Schema({
-    first_name:{type:String},
     last_name:{type:String},
+    first_name:{type:String},
     email:{
         type:String,
         required:true,
@@ -13,7 +13,6 @@ const user=new mongoose.Schema({
     },
     
     password:{type:String,required:true},
-    cpassword:{type:String,required:true},
     token: {
         type: String,
         default: null,
@@ -30,5 +29,5 @@ user.pre('save',async function(next ){
     // console.log(this.password)
 })
 
- const Student=new mongoose.model('ExistingUsers',user)
-module.exports=Student
+ const User=new mongoose.model('ExistingUsers',user)
+module.exports=User

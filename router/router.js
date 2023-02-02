@@ -11,9 +11,10 @@ router.get('/',(req,res)=>{
 router.get('/signup',user.signpage)
 router.post('/signup',user.register)
 router.post('/',user.login)
-// router.get('/chat',(req,res) => {
-// res.render('chatpage')
-// })
+
+router.get('/chat',user.chat)
+router.get('/index',user.loginG)
+router.get('/',user.loginG)
 
 
 
